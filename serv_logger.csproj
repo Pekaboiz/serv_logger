@@ -103,8 +103,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JSONGen.cs" />
-    <Compile Include="ServiceWorker.cs">
+    <Compile Include="Service\JSONGen.cs" />
+    <Compile Include="Service\ServiceWorker.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Service1.cs">
