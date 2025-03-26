@@ -38,8 +38,8 @@ namespace ServiceLogger
             }
         }
 
-       // protected override void OnStart(string[] args)
-        public void Start()
+        protected override void OnStart(string[] args)
+        //public void Start()
         {
             LoadConfiguration(); // Загружаем конфиг при старте
 

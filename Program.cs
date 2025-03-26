@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using serv_logger;
+using System.ServiceProcess;
 
 namespace ServiceLogger
 {
@@ -12,8 +14,12 @@ namespace ServiceLogger
 #if DEBUG
             JSONGen.GenerateConfig();
             var serv = new ServiceWorker();
-
-            serv.Start();
+            ServiceBase[] ServiceWorker;
+            ServiceWorker = new ServiceBase[]
+            {
+                new Service1()
+            };
+            ServiceBase.Run(ServiceWorker);
 
 #else
             ServiceBase[] ServicesToRun;
