@@ -1,20 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "serv_logger", "serv_logger.csproj", "{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ServPkaSetup", "..\ServPkaSetup\ServPkaSetup.vdproj", "{E76FF6EA-C82B-F247-8221-9965AECD25C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		v1.0.0|Any CPU = v1.0.0|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}.v1.0.0|Any CPU.ActiveCfg = v1.0.0|Any CPU
+		{DA9DF5AE-6B6C-4639-89C8-CC66C510488F}.v1.0.0|Any CPU.Build.0 = v1.0.0|Any CPU
+		{E76FF6EA-C82B-F247-8221-9965AECD25C0}.Debug|Any CPU.ActiveCfg = Debug
+		{E76FF6EA-C82B-F247-8221-9965AECD25C0}.Release|Any CPU.ActiveCfg = Release
+		{E76FF6EA-C82B-F247-8221-9965AECD25C0}.v1.0.0|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,19 +5,20 @@ using System.Timers;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
-namespace ServiceLogger
+namespace ServPkaLog
 {
     public class ServiceWorker : ServiceBase
     {
         private Timer _timer;
-        private string _logSource = "ServiceLogger";
-        private int _logIntervalMinutes = 1;
+        private string _logSource;
+        //private int _logIntervalMinutes = 1;
         private const string ConfigFilePath = "config.json";
+        private EventLog _eventLog; 
 
         public ServiceWorker() 
         {
-            this.ServiceName = "ServiceLogger";
-            LoadConfiguration();
+            
+            //LoadConfiguration();
         }
 
         private void LoadConfiguration()
@@ -29,41 +30,59 @@ namespace ServiceLogger
                     string json = File.ReadAllText(ConfigFilePath);
                     JObject config = JObject.Parse(json);
 
-                    _logIntervalMinutes = config["timeout"]?.Value<int>() ?? 1;
+                    // this.ServiceName = config["Config"]?["Name"]?.Value<string>() ?? "Undefined";
+                    // _logIntervalMinutes = config["Config"]?["TimeOut"]?.Value<int>() ?? 1;
+                    this.ServiceName = "ServPkaLogg";
+                    //_logIntervalMinutes = 1;
+                    _logSource = this.ServiceName;
+                    
                 }
             }
             catch (Exception ex)
             {
-                EventLog.WriteEntry("MyLoggingService", $"Ошибка загрузки конфига: {ex.Message}", EventLogEntryType.Error);
+                EventLog.WriteEntry("ServPkaLogg", $"Ошибка загрузки конфига: {ex.Message}", EventLogEntryType.Error);
             }
         }
 
         protected override void OnStart(string[] args)
-        //public void Start()
         {
-            LoadConfiguration(); // Загружаем конфиг при старте
+            //LoadConfiguration(); // Загружаем конфиг при старте
+            // Путь к текущему исполняемому файлу
+            string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
-            if (!EventLog.SourceExists(_logSource))
+            // Проверяем, существует ли источник "ServiceLogger"
+            if (!EventLog.SourceExists("ServPkaLogg"))
             {
-                EventLog.CreateEventSource(_logSource, "Application");
+                // Создаем источник событий
+                EventLog.CreateEventSource("ServPkaLogg", "Application");
+
+                // После создания источника события, Windows автоматически использует исполняемый файл для ресурсов сообщений
+                EventLog.WriteEntry("ServPkaLogg", $"Источник событий 'ServPkaSource' был создан {exePath}", EventLogEntryType.Information);
             }
 
-            _timer = new Timer(_logIntervalMinutes * 60000); // Интервал из конфига
+            // Создаем объект EventLog
+            _eventLog = new EventLog
+            {
+                Source = "ServPkaLogg",
+                Log = "Application"
+            };
+
+            _eventLog.WriteEntry("Сервис запущен!", EventLogEntryType.Information);
+
+            _timer = new Timer(60000); // Интервал из конфига
             _timer.Elapsed += OnTimerElapsed;
             _timer.Start();
-
-            EventLog.WriteEntry(_logSource, "Сервис запущен!", EventLogEntryType.Information);
         }
 
         protected override void OnStop()
         {
             _timer.Stop();
-            EventLog.WriteEntry(_logSource, "Сервис остановлен!", EventLogEntryType.Information);
+            EventLog.WriteEntry("ServPkaLogg", "Сервис остановлен!", EventLogEntryType.Information);
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            EventLog.WriteEntry(_logSource, $"Сервис работает: {DateTime.Now}", EventLogEntryType.Information);
+            EventLog.WriteEntry("ServPkaLogg", $"Сервис работает: {DateTime.Now}", EventLogEntryType.Information);
         }
     }
 }

@@ -2,8 +2,9 @@
 using System.IO;
 using System.Threading;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace ServiceLogger
+namespace ServPkaLog
 {
     /// <summary>
     /// Генератор json конфигуратора
@@ -12,12 +13,18 @@ namespace ServiceLogger
     {
         public static void GenerateConfig()
         {
-            var config = new
+            var config = new JObject
             {
-                timeout = 600
+                ["TimeOut"] = 0.5,
+                ["Name"] = "ServiceLogger"
             };
 
-            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            var root = new JObject
+            {
+                ["Config"] = config
+            };
+
+            string json = JsonConvert.SerializeObject(root, Formatting.Indented);
             File.WriteAllText("config.json", json);
         }
     }
