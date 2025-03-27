@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using serv_logger;
 using System.ServiceProcess;
 
-namespace ServiceLogger
+namespace ServPkaLog
 {
     internal static class Program
     {
@@ -17,17 +17,18 @@ namespace ServiceLogger
             ServiceBase[] ServiceWorker;
             ServiceWorker = new ServiceBase[]
             {
-                new Service1()
+                new ServiceWorker()
             };
             ServiceBase.Run(ServiceWorker);
-
 #else
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            //JSONGen.GenerateConfig();
+            var serv = new ServiceWorker();
+            ServiceBase[] ServiceWorker;
+            ServiceWorker = new ServiceBase[]
             {
-                new Service1()
+                new ServiceWorker()
             };
-            ServiceBase.Run(ServicesToRun);
+            ServiceBase.Run(ServiceWorker);
 #endif
 
         }
