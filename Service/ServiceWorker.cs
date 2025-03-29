@@ -4,85 +4,73 @@ using System.ServiceProcess;
 using System.Timers;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Hosting;
 
 namespace ServPkaLog
 {
     public class ServiceWorker : ServiceBase
     {
         private Timer _timer;
-        private string _logSource;
-        //private int _logIntervalMinutes = 1;
-        private const string ConfigFilePath = "config.json";
-        private EventLog _eventLog; 
-
-        public ServiceWorker() 
+        private float minute = 1;
+        private readonly string configPath = string.Empty;
+       
+        public ServiceWorker()
         {
+            string configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $@"\Config\{JSONGen.confName}";
             
-            //LoadConfiguration();
+            if (File.Exists(configPath))
+            {
+                LoadConfiguration();
+            }
+            else
+            {
+                throw new FileNotFoundException($"Configuration file not found at {configPath}");
+            }
         }
 
         private void LoadConfiguration()
         {
-            try
-            {
-                if (File.Exists(ConfigFilePath))
-                {
-                    string json = File.ReadAllText(ConfigFilePath);
-                    JObject config = JObject.Parse(json);
+            string json = File.ReadAllText(configPath);
+            JObject config = JObject.Parse(json);
 
-                    // this.ServiceName = config["Config"]?["Name"]?.Value<string>() ?? "Undefined";
-                    // _logIntervalMinutes = config["Config"]?["TimeOut"]?.Value<int>() ?? 1;
-                    this.ServiceName = "ServPkaLogg";
-                    //_logIntervalMinutes = 1;
-                    _logSource = this.ServiceName;
-                    
-                }
-            }
-            catch (Exception ex)
-            {
-                EventLog.WriteEntry("ServPkaLogg", $"Ошибка загрузки конфига: {ex.Message}", EventLogEntryType.Error);
-            }
+            this.ServiceName = config["Config"]?["Name"]?.Value<string>() ?? "ServiceLoggerPKA";
+            minute = config["Config"]?["TimeOut"]?.Value<float>() ?? 1;
         }
 
         protected override void OnStart(string[] args)
         {
-            //LoadConfiguration(); // Загружаем конфиг при старте
-            // Путь к текущему исполняемому файлу
-            string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-            // Проверяем, существует ли источник "ServiceLogger"
-            if (!EventLog.SourceExists("ServPkaLogg"))
+            if (this.ServiceName.Length != 0) return;
+           
+            try
             {
-                // Создаем источник событий
-                EventLog.CreateEventSource("ServPkaLogg", "Application");
+                if (!EventLog.SourceExists(this.ServiceName))
+                {
+                    EventLog.CreateEventSource(this.ServiceName, "Application");
+                }
 
-                // После создания источника события, Windows автоматически использует исполняемый файл для ресурсов сообщений
-                EventLog.WriteEntry("ServPkaLogg", $"Источник событий 'ServPkaSource' был создан {exePath}", EventLogEntryType.Information);
+                EventLog.WriteEntry("Service is starting.");
+
+                _timer = new Timer(minute * 60000); 
+                _timer.Elapsed += OnTimerElapsed;
+                _timer.Start();
+
+                EventLog.WriteEntry("Service started.");
             }
-
-            // Создаем объект EventLog
-            _eventLog = new EventLog
+            catch (Exception ex)
             {
-                Source = "ServPkaLogg",
-                Log = "Application"
-            };
-
-            _eventLog.WriteEntry("Сервис запущен!", EventLogEntryType.Information);
-
-            _timer = new Timer(60000); // Интервал из конфига
-            _timer.Elapsed += OnTimerElapsed;
-            _timer.Start();
+                EventLog.WriteEntry("Error starting service: " + ex.Message, EventLogEntryType.Error);
+            }
         }
 
         protected override void OnStop()
         {
             _timer.Stop();
-            EventLog.WriteEntry("ServPkaLogg", "Сервис остановлен!", EventLogEntryType.Information);
+            EventLog.WriteEntry("Service is stopped!", EventLogEntryType.Information);
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            EventLog.WriteEntry("ServPkaLogg", $"Сервис работает: {DateTime.Now}", EventLogEntryType.Information);
+            EventLog.WriteEntry($"Service is working. Massages every {minute} min", EventLogEntryType.Information);
         }
     }
 }

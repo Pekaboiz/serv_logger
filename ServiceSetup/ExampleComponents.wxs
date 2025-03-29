@@ -1,0 +1,34 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<!-- Установка файла конфигурации и пути в реестре -->
+		<Component Id="ConfigFileComponent" Guid="8a8b3a16-58d7-4aef-a63a-b7a1613b1c2c" Directory="ConfigFolder">
+			<RegistryValue Id="ConfigFileRegKey" Root="HKCU" Key="Software\ServiceLoggPKA" Name="ConfigFilePath" Type="string" Value="[ConfigFolder]\servicesetting.json" KeyPath="yes"/>
+			<File Id="ConfigFile" Name="servicesetting.json" Source="D:\Git\service\bin\Release\servicesetting.json" />
+			<RemoveFolder Id="RemoveThisFolder" On="uninstall" />
+		</Component>
+
+		<ComponentGroup Id="ServiceComponentGroup" Directory="INSTALLFOLDER">
+
+			<!-- Файл сервиса -->
+			<Component Id="ServiceComponent" Guid="3d467eb8-a386-431d-bc40-bb8a6e0dfea0">
+				<File Id="serv_logger" Name="serv_logger.exe" Source="D:\Git\service\bin\Release\serv_logger.exe" KeyPath="yes"/>
+				<ServiceInstall Id="ServiceInstall"
+								Name="ServPkaLogg"
+								DisplayName="Service Logg PKA"
+								Description="Service for logging events"
+								Start="auto"
+								Type="ownProcess"
+								ErrorControl="normal"
+								Account="LocalSystem"
+								Vital="yes" />
+
+				<ServiceControl Id="ServiceControl"
+								Name="ServPkaLogg"
+								Start="install"
+								Stop="both"
+								Remove="uninstall"
+								Wait="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

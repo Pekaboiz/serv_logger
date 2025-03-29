@@ -1,0 +1,11 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="ServiceSetup" Manufacturer="Service" Version="1.0.0.0" UpgradeCode="8fdbb6c1-16fc-473d-950f-e8ac9c0592a1" >
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+	  <Feature Id="Main">
+		  <ComponentRef Id="ConfigFileComponent" />
+		  <ComponentGroupRef Id="ServiceComponentGroup" />
+	  </Feature>
+
+  </Package>
+</Wix>

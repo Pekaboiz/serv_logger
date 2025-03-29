@@ -1,0 +1,13 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+	  <StandardDirectory Id="AppDataFolder">
+		  <Directory Id="ConfigFolder" Name="Config" />
+	  </StandardDirectory>
+	  
+	  <StandardDirectory Id="ProgramFiles6432Folder">
+		  <Directory Id="INSTALLFOLDER" Name="ServiceLoggPka" />
+	  </StandardDirectory>
+  </Fragment>
+</Wix>
+
+<!--Атрибут "Id" недействителен: значение "AppData" недействительно с точки зрения его типа данных "http://wixtoolset.org/schemas/v4/wxs:StandardDirectoryTypeUnion" — Значение "AppData" недействительно ни для одного из типов, указанных в свойстве memberTypes объединения.-->

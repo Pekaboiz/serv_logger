@@ -15,8 +15,8 @@ namespace ServPkaLog
 
             procInstaller.Account = sp.ServiceAccount.LocalSystem;
 
-            serviceInstaller.ServiceName = "ServPkaLog";
-            serviceInstaller.DisplayName = "ServPkaLog";
+            serviceInstaller.ServiceName = "ServiceLoggerPKA";
+            serviceInstaller.DisplayName = "ServiceLoggerPKA";
             serviceInstaller.StartType = sp.ServiceStartMode.Automatic;
 
             Installers.Add(procInstaller);

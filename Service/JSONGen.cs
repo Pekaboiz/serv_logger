@@ -6,17 +6,16 @@ using Newtonsoft.Json.Linq;
 
 namespace ServPkaLog
 {
-    /// <summary>
-    /// Генератор json конфигуратора
-    /// </summary>
+   
     public class JSONGen
     {
+        public static string confName = "servicesetting.json";
         public static void GenerateConfig()
         {
             var config = new JObject
             {
                 ["TimeOut"] = 0.5,
-                ["Name"] = "ServiceLogger"
+                ["Name"] = "ServiceLoggerPKA"
             };
 
             var root = new JObject
@@ -25,7 +24,8 @@ namespace ServPkaLog
             };
 
             string json = JsonConvert.SerializeObject(root, Formatting.Indented);
-            File.WriteAllText("config.json", json);
+            File.WriteAllText(confName, json);
+            
         }
     }
 }
